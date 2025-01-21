@@ -16,9 +16,8 @@ event.preventDefault();
 const userId=userIdElement.current.value;
 const title=titleElement.current.value;
 const body=bodyElement.current.value;
-const views=viewsElement.current.value;
+const views=Number(viewsElement.current.value);
 const tags=tagsElement.current.value.split(" ");
-addPost(userId,title,body,views,tags);
 
 userIdElement.current.value=""
 titleElement.current.value=""
@@ -26,7 +25,31 @@ bodyElement.current.value=""
 viewsElement.current.value=""
 tagsElement.current.value=""
 
+
+fetch('https://dummyjson.com/posts/add', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    userId:userId,
+    title:title,
+    body:body,
+    views:views,
+    tags:tags
+    /* other post data */
+  })
+})
+.then(res =>  res.json())
+.then(post=>{
+  
+  if(!post.views){
+    post.views=views
+  }
+  
+  addPost(post)});
+
 }
+
+
 
   return(
     <>
